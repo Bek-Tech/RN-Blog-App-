@@ -5,8 +5,17 @@ import createDataContext from './createDataContext';
 
 const BlogReducer = (BlogPosts, action) => {
   switch (action.type) {
+    case 'delete_blog':
+      return BlogPosts.filter (blogPost => blogPost.id !== action.payload);
+
     case 'add_blog':
-      return [...BlogPosts, {title: `My Blog Post #${BlogPosts.length + 1}`}];
+      return [
+        ...BlogPosts,
+        {
+          id: Math.floor (Math.random () * 9999), //   this gives random number  to id
+          title: `My Blog Post #${BlogPosts.length + 1}`,
+        },
+      ];
 
     default:
       return BlogPosts;
@@ -23,11 +32,16 @@ const addBlogPost = dispatch => {
     dispatch ({type: 'add_blog'});
   };
 };
+const deleteBlogPost = dispatch => {
+  return id => {
+    dispatch ({type: 'delete_blog', payload: id}); //135
+  };
+};
 
 //   createDataContext has  3 parameters   reducer (BlogReducer) ,  actions ({addBlogPost}),  initialState ( [])
 export const {Context, Provider} = createDataContext (
   BlogReducer,
-  {addBlogPost},
+  {addBlogPost, deleteBlogPost},
   []
 );
 
