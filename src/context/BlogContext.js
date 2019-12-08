@@ -13,7 +13,8 @@ const BlogReducer = (BlogPosts, action) => {
         ...BlogPosts,
         {
           id: Math.floor (Math.random () * 9999), //   this gives random number  to id
-          title: `My Blog Post #${BlogPosts.length + 1}`,
+          title: action.payload.title,
+          content: action.payload.content,
         },
       ];
 
@@ -28,8 +29,11 @@ const BlogReducer = (BlogPosts, action) => {
 
 // to this :
 const addBlogPost = dispatch => {
-  return () => {
-    dispatch ({type: 'add_blog'});
+  return (title, content, callback) => {
+    // callback === ()=>navigation.navigate("Index")  it comes from CreateScreen
+    // this function means  run dispatch and after  response run callback   //142
+    dispatch ({type: 'add_blog', payload: {title, content}});
+    callback ();
   };
 };
 const deleteBlogPost = dispatch => {
