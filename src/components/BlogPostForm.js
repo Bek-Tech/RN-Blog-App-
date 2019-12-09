@@ -1,16 +1,21 @@
 import React, {useContext, useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button} from 'react-native';
 
-const BlogPostForm = ({onSubmit}) => {
-  const [Title, setTitle] = useState ('');
-  const [Content, setContent] = useState ('');
+const BlogPostForm = ({onSubmit, initialValues}) => {
+  const [Title, setTitle] = useState (initialValues.title);
+  const [Content, setContent] = useState (initialValues.content);
   return (
     <View>
       <Text style={styles.text}>Title:</Text>
-      <TextInput style={styles.Input} onChangeText={text => setTitle (text)} />
+      <TextInput
+        style={styles.Input}
+        value={Title}
+        onChangeText={text => setTitle (text)}
+      />
       <Text style={styles.text}>Content:</Text>
       <TextInput
         style={styles.Input}
+        value={Content}
         onChangeText={text => setContent (text)}
       />
       <Button
@@ -19,6 +24,12 @@ const BlogPostForm = ({onSubmit}) => {
       />
     </View>
   );
+};
+BlogPostForm.defaultProps = {
+  initialValues: {
+    title: '',
+    content: '',
+  },
 };
 
 const styles = StyleSheet.create ({

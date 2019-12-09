@@ -6,12 +6,24 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import BlogPostForm from '../components/BlogPostForm';
 
 const EditScreen = ({navigation}) => {
-  const {state} = useContext (Context);
-  const BlogPost = state.find (blog => blog.id === navigation.getParam ('id'));
-  const [Title, setTitle] = useState (BlogPost.title);
-  const [Content, setContent] = useState (BlogPost.content);
+  const id = navigation.getParam ('id');
+  const {state, editBlogPost} = useContext (Context);
 
-  return <BlogPostForm />;
+  const BlogPost = state.find (blog => blog.id === id);
+
+  return (
+    <BlogPostForm
+      initialValues={{title: BlogPost.title, content: BlogPost.content}}
+      onSubmit={(Title, Content, id) => {
+        editBlogPost (
+          Title,
+          Content,
+          BlogPost.id,
+          navigation.navigate ('Show')
+        );
+      }}
+    />
+  );
 };
 
 const styles = StyleSheet.create ({});

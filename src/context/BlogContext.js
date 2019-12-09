@@ -17,6 +17,10 @@ const BlogReducer = (BlogPosts, action) => {
           content: action.payload.content,
         },
       ];
+    case 'edit_blog':
+      return BlogPosts.map (blogPost => {
+        return blogPost.id === action.payload.id ? action.payload : blogPost;
+      });
 
     default:
       return BlogPosts;
@@ -41,11 +45,16 @@ const deleteBlogPost = dispatch => {
     dispatch ({type: 'delete_blog', payload: id}); //135
   };
 };
+const editBlogPost = dispatch => {
+  return (title, content, id) => {
+    dispatch ({type: 'edit_blog', payload: {title, content, id}}); //135
+  };
+};
 
 //   createDataContext has  3 parameters   reducer (BlogReducer) ,  actions ({addBlogPost}),  initialState ( [])
 export const {Context, Provider} = createDataContext (
   BlogReducer,
-  {addBlogPost, deleteBlogPost},
+  {addBlogPost, deleteBlogPost, editBlogPost},
   [{title: 'test', content: 'test content', id: 1}]
 );
 
