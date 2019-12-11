@@ -9,6 +9,13 @@ const IndexScreen = ({navigation}) => {
   // if you run getBlogPost  without useEffect it causes  infinite rendering   (158)
   useEffect (() => {
     getBlogPosts ();
+    // this solves problem with refetching    160
+    const Listener = navigation.addListener ('didFocus', () => {
+      getBlogPosts ();
+    });
+    return () => {
+      Listener.remove ();
+    };
   }, []);
 
   return (
@@ -19,16 +26,19 @@ const IndexScreen = ({navigation}) => {
         keyExtractor={state => state.title}
         renderItem={({item}) => {
           return (
-            <TouchableOpacity
-              onPress={() => navigation.navigate ('Show', {id: item.id})}
-            >
-              <View style={styles.row}>
-                <Text style={styles.title}>{item.title}-{item.id}</Text>
-                <TouchableOpacity onPress={() => deleteBlogPost (item.id)}>
-                  <Feather style={styles.icon} name="trash" />
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
+            <View style={styles.row}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate ('Show', {id: item.id})}
+              >
+                <View>
+                  <Text style={styles.title}>{item.title}-{item.id}</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => deleteBlogPost (item.id)}>
+                <Feather style={styles.icon} name="trash" />
+              </TouchableOpacity>
+
+            </View>
           );
         }}
       />

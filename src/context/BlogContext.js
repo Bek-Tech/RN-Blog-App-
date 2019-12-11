@@ -45,15 +45,21 @@ const getBlogPosts = dispatch => {
 
 // to this :
 const addBlogPost = dispatch => {
-  return (title, content, callback) => {
-    // callback === ()=>navigation.navigate("Index")  it comes from CreateScreen
-    // this function means  run dispatch and after  response run callback   //142
-    dispatch ({type: 'add_blog', payload: {title, content}});
+  return async (title, content, callback) => {
+    // while working with server use this    159
+    await jsonServer.post ('./blogposts', {title, content});
     callback ();
+
+    // // callback === ()=>navigation.navigate("Index")  it comes from CreateScreen
+    // // this function means  run dispatch and after  response run callback   //142
+    // dispatch ({type: 'add_blog', payload: {title, content}});
+    // callback ();
   };
 };
 const deleteBlogPost = dispatch => {
-  return id => {
+  return async id => {
+    console.log (id);
+    await jsonServer.delete (`/blogposts/${id}`); //161
     dispatch ({type: 'delete_blog', payload: id}); //135
   };
 };
@@ -68,7 +74,7 @@ const editBlogPost = dispatch => {
 export const {Context, Provider} = createDataContext (
   BlogReducer,
   {addBlogPost, deleteBlogPost, editBlogPost, getBlogPosts},
-  [{title: 'test', content: 'test content', id: 1}]
+  []
 );
 
 //  const [BlogPosts, dispatch] = useReducer (BlogReducer, []);
