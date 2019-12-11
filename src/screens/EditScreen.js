@@ -19,7 +19,8 @@ const EditScreen = ({navigation}) => {
           Title,
           Content,
           BlogPost.id,
-          navigation.navigate ('Show')
+          // navigation.navigate ('Show')
+          navigation.pop ()
         );
       }}
     />

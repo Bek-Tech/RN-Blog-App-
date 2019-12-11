@@ -1,10 +1,13 @@
 // import React, {useReducer} from 'react';
 import createDataContext from './createDataContext';
+import jsonServer from '../api/jsonServer';
 
 // const BlogContext = React.createContext ();
 
 const BlogReducer = (BlogPosts, action) => {
   switch (action.type) {
+    case 'get-blogPosts':
+      return action.payload;
     case 'delete_blog':
       return BlogPosts.filter (blogPost => blogPost.id !== action.payload);
 
@@ -26,6 +29,15 @@ const BlogReducer = (BlogPosts, action) => {
       return BlogPosts;
   }
 };
+
+const getBlogPosts = dispatch => {
+  return async () => {
+    const response = await jsonServer.get ('/blogposts');
+    //response.data === []  or [{},{},{}]
+    dispatch ({type: 'get-blogPosts', payload: response.data});
+  };
+};
+
 // to get access to dispatch function  change this function
 // const addBlogPost = () => {
 //   dispatch ({type: 'add_blog'});
@@ -46,15 +58,16 @@ const deleteBlogPost = dispatch => {
   };
 };
 const editBlogPost = dispatch => {
-  return (title, content, id) => {
+  return (title, content, id, callback) => {
     dispatch ({type: 'edit_blog', payload: {title, content, id}}); //135
+    callback ();
   };
 };
 
-//   createDataContext has  3 parameters   reducer (BlogReducer) ,  actions ({addBlogPost}),  initialState ( [])
+//   createDataContext has  3 parameters   reducer (BlogReducer) ,  actions ({functions which contains dispatch}),  initialState ( [])
 export const {Context, Provider} = createDataContext (
   BlogReducer,
-  {addBlogPost, deleteBlogPost, editBlogPost},
+  {addBlogPost, deleteBlogPost, editBlogPost, getBlogPosts},
   [{title: 'test', content: 'test content', id: 1}]
 );
 
