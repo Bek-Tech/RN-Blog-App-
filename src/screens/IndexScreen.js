@@ -31,7 +31,7 @@ const IndexScreen = ({navigation}) => {
                 onPress={() => navigation.navigate ('Show', {id: item.id})}
               >
                 <View>
-                  <Text style={styles.title}>{item.title}-{item.id}</Text>
+                  <Text style={styles.title}>{item.id}. {item.title}</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => deleteBlogPost (item.id)}>

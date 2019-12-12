@@ -20,7 +20,7 @@ const EditScreen = ({navigation}) => {
           Content,
           BlogPost.id,
           // navigation.navigate ('Show')
-          navigation.pop ()
+          () => navigation.pop () // pop() function  returns back screen
         );
       }}
     />
